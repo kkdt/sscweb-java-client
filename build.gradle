@@ -1,0 +1,100 @@
+/**
+ * MIT License
+ * Copyright (c) 2017 kkdt
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+group = 'sscweb'
+version = '0.1'
+
+description = "Generate wsimport artifacts from wsdl"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+   jcenter()
+   mavenLocal()
+   maven {
+      url "http://repo.maven.apache.org/maven2"
+   }
+}
+
+eclipse {
+   classpath {
+      downloadSources=true
+   }
+}
+
+configurations {
+    // Define a new configuration that will be linked to jaxws and all its dependencies
+   jaxws
+}
+
+ext {
+   wsdlLocation = 'https://sscweb.gsfc.nasa.gov/WS/ssc/2/SatelliteSituationCenterService?wsdl'
+   destDir = file("src/main/generated")
+}
+
+dependencies {
+   // Gradle will pull down all the dependencies for jaxws configuration
+   jaxws 'com.sun.xml.ws:jaxws-tools:2.1.7'
+   
+   testCompile 'junit:junit:4.12'
+}
+
+sourceSets {
+   main {
+      java {
+         srcDir destDir
+      }
+   }
+}
+
+/**
+ * Underlying wsimport task utilizes ant to run with the provided jaxws configuration
+ * and all its dependencies.
+ */
+task wsimport(description:'Create java stubs from WSDL') {
+   doLast {
+      ant {
+         sourceSets.main.output.classesDir.mkdirs()
+         destDir.mkdirs()
+         taskdef(name:'wsimport',
+            classname:'com.sun.tools.ws.ant.WsImport',
+            classpath:configurations.jaxws.asPath)
+         wsimport(keep:true,
+            destdir: sourceSets.main.output.classesDir,
+            sourcedestdir: destDir,
+            wsdl:wsdlLocation)
+      }
+   }
+}
+compileJava.dependsOn(wsimport)
+
+task cleanAll(description:'Complete clean of project and generated artifacts') {
+   doLast {
+      delete destDir
+   }
+}
+cleanAll.dependsOn 'clean'
