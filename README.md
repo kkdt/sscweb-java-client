@@ -1,14 +1,10 @@
-> Original project exported from a personal subversion server into a git
-> repository, and pushed to Github. This is intended to be "notes to myself"
-> because I have trouble remembering what I did the previous day...
-
 # Satellite Situation Center 2.0 Web Services
 Gradle project that pulls the WSDL from the [Satellite Situation Center](https://sscweb.sci.gsfc.nasa.gov/WebServices/SOAP) interface and builds the necessary client stubs to access the web service. The built artifact is a Jar file containing all the generated JAX-WS artifacts.
 
-The WSDL location is `https://sscweb.gsfc.nasa.gov/WS/ssc/2/SatelliteSituationCenterService?wsdl`.
+WSDL: `https://sscweb.gsfc.nasa.gov/WS/ssc/2/SatelliteSituationCenterService?wsdl`.
 
 ## Gradle Build
-```javascript
+```
 ------------------------------------------------------------
 Gradle 3.3
 ------------------------------------------------------------
@@ -47,3 +43,5 @@ apply plugin: 'maven'
 `gradle cleanEclipse eclipse` Generated all Eclipse artifacts
 
 `gradle install` Install to local Maven repository
+
+> Original project exported from a personal subversion server into a git repository, and pushed to Github.
