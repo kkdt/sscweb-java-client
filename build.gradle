@@ -23,6 +23,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 group = 'sscweb'
 version = '0.1'
@@ -54,6 +55,7 @@ configurations {
 ext {
    wsdlLocation = 'https://sscweb.gsfc.nasa.gov/WS/ssc/2/SatelliteSituationCenterService?wsdl'
    destDir = file("src/main/generated")
+   localrepo = project.hasProperty('localrepo') ? localrepo : buildDir.path + "/artifacts"
 }
 
 dependencies {
@@ -98,3 +100,23 @@ task cleanAll(description:'Complete clean of project and generated artifacts') {
    }
 }
 cleanAll.dependsOn 'clean'
+
+publishing {
+    publications {
+        myPublication(MavenPublication) {
+            // publish jar archive
+            from components.java
+            // include publish README.md
+            artifact ('README.md') {
+                classifier = 'README'
+                extension  = 'md'
+            }
+        }
+    }
+    // publish artifacts to local directory
+    repositories {
+       maven {
+          url file(localrepo)
+       }
+    }
+ }
