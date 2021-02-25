@@ -245,45 +245,47 @@ public class WsExampleUtil {
             List<Float> lat = coords.get(j).getLatitude();
             List<Float> lon = coords.get(j).getLongitude();
             List<Double> lt = coords.get(j).getLocalTime();
+            CoordinateSystem coordinateSystem = coords.get(j).getCoordinateSystem();
 
             if (x != null && i < x.size()) {
-               System.out.printf("  %10.2f", x.get(i));
+               System.out.printf("  %10.2f (x)", x.get(i));
             }
             if (y != null && i < y.size()) {
-               System.out.printf("  %10.2f", y.get(i));
+               System.out.printf("  %10.2f (y)", y.get(i));
             }
             if (z != null && i < z.size()) {
-               System.out.printf("  %10.2f", z.get(i));
+               System.out.printf("  %10.2f (z)", z.get(i));
             }
             if (lat != null && i < lat.size()) {
-               System.out.printf("  %10.2f", lat.get(i));
+               System.out.printf("  %10.2f (lat)", lat.get(i));
             }
             if (lon != null && i < lon.size()) {
-               System.out.printf("  %10.2f", lon.get(i));
+               System.out.printf("  %10.2f (lon)", lon.get(i));
             }
             if (lt != null && i < lt.size()) {
-               System.out.printf("  %10.2f", lt.get(i));
+               System.out.printf("  %10.2f (localtime)", lt.get(i));
             }
+            System.out.printf("  %s (coordinateSystem)", coordinateSystem);
          }
 
-         for (BTraceData bTraceData : bTrace) {
-            List<Double> arcLength = bTraceData.getArcLength();
-            List<Float> lat = bTraceData.getLatitude();
-            List<Float> lon = bTraceData.getLongitude();
-            CoordinateSystem coordinateSystem = bTraceData.getCoordinateSystem();
-            Hemisphere hemisphere = bTraceData.getHemisphere();
-
-            System.out.printf("  %s/%s", coordinateSystem.name(), hemisphere.name());
-            if (arcLength != null && i < arcLength.size()) {
-               System.out.printf("  %10.2f", arcLength.get(i));
-            }
-            if (lat != null && i < lat.size()) {
-               System.out.printf("  %10.2f", lat.get(i));
-            }
-            if (lon != null && i < lon.size()) {
-               System.out.printf("  %10.2f", lon.get(i));
-            }
-         }
+//         for (BTraceData bTraceData : bTrace) {
+//            List<Double> arcLength = bTraceData.getArcLength();
+//            List<Float> lat = bTraceData.getLatitude();
+//            List<Float> lon = bTraceData.getLongitude();
+//            CoordinateSystem coordinateSystem = bTraceData.getCoordinateSystem();
+//            Hemisphere hemisphere = bTraceData.getHemisphere();
+//
+//            System.out.printf("  %s/%s", coordinateSystem.name(), hemisphere.name());
+//            if (arcLength != null && i < arcLength.size()) {
+//               System.out.printf("  %10.2f", arcLength.get(i));
+//            }
+//            if (lat != null && i < lat.size()) {
+//               System.out.printf("  %10.2f", lat.get(i));
+//            }
+//            if (lon != null && i < lon.size()) {
+//               System.out.printf("  %10.2f", lon.get(i));
+//            }
+//         }
          System.out.println();
       }
    }
