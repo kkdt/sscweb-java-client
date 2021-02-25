@@ -22,20 +22,6 @@
  */
 package gov.nasa.gsfc.spdf.ssc.test;
 
-import static org.junit.Assert.assertTrue;
-
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import gov.nasa.gsfc.spdf.ssc.CoordinateSystem;
 import gov.nasa.gsfc.spdf.ssc.DataResult;
 import gov.nasa.gsfc.spdf.ssc.FileResult;
@@ -43,8 +29,16 @@ import gov.nasa.gsfc.spdf.ssc.KmlRequest;
 import gov.nasa.gsfc.spdf.ssc.ResultStatusCode;
 import gov.nasa.gsfc.spdf.ssc.SSCExternalException_Exception;
 import gov.nasa.gsfc.spdf.ssc.SatelliteDescription;
-import gov.nasa.gsfc.spdf.ssc.SatelliteSituationCenterInterface;
 import gov.nasa.gsfc.spdf.ssc.SatelliteSpecification;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * <p>
@@ -56,18 +50,6 @@ import gov.nasa.gsfc.spdf.ssc.SatelliteSpecification;
  *
  */
 public class SatelliteSituationCenterInterfaceTest extends WsExampleUtil {
-   // using unsecure wsdl location to avoid setting up in ide
-   private static String wsdlLocation = "http://sscWeb.gsfc.nasa.gov/WS/ssc/2/SatelliteSituationCenterService?wsdl";
-   private static SatelliteSituationCenterInterface ssc;
-   private static Calendar now = Calendar.getInstance(UTC_TIME_ZONE);
-   
-   @BeforeClass
-   public static void setup() throws MalformedURLException {
-      System.out.println("Setting up unit test...");
-      ssc = getSSC(wsdlLocation);
-      assertTrue(ssc != null);
-   }
-   
    @Test
    public void testGetAllSatellites() throws SSCExternalException_Exception {
       List<SatelliteDescription> activeSatellites = new ArrayList<>();

@@ -34,70 +34,68 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-   jcenter()
-   mavenLocal()
-   maven {
-      url "http://repo.maven.apache.org/maven2"
-   }
+    jcenter()
+    mavenLocal()
 }
 
 eclipse {
-   classpath {
-      downloadSources=true
-   }
+    classpath {
+        downloadSources = true
+    }
 }
 
 configurations {
     // Define a new configuration that will be linked to jaxws and all its dependencies
-   jaxws
+    jaxws
 }
 
 ext {
-   wsdlLocation = 'https://sscweb.gsfc.nasa.gov/WS/ssc/2/SatelliteSituationCenterService?wsdl'
-   destDir = file("src/main/generated")
-   localrepo = project.hasProperty('localrepo') ? localrepo : buildDir.path + "/artifacts"
+    wsdlLocation = 'https://sscweb.gsfc.nasa.gov/WS/ssc/2/SatelliteSituationCenterService?wsdl'
+    destDir = file("src/main/generated")
+    localrepo = project.hasProperty('localrepo') ? localrepo : buildDir.path + "/artifacts"
 }
 
 dependencies {
-   // Gradle will pull down all the dependencies for jaxws configuration
-   jaxws 'com.sun.xml.ws:jaxws-tools:2.1.7'
-   
-   testCompile 'junit:junit:4.12'
+    // Gradle will pull down all the dependencies for jaxws configuration
+    jaxws 'com.sun.xml.ws:jaxws-tools:2.1.7'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'javax.xml.bind:jaxb-api:2.3.1'
 }
 
 sourceSets {
-   main {
-      java {
-         srcDir destDir
-      }
-   }
+    main {
+        java {
+            srcDir destDir
+        }
+    }
 }
 
 /**
  * Underlying wsimport task utilizes ant to run with the provided jaxws configuration
  * and all its dependencies.
  */
-task wsimport(description:'Create java stubs from WSDL') {
-   doLast {
-      ant {
-         sourceSets.main.output.classesDir.mkdirs()
-         destDir.mkdirs()
-         taskdef(name:'wsimport',
-            classname:'com.sun.tools.ws.ant.WsImport',
-            classpath:configurations.jaxws.asPath)
-         wsimport(keep:true,
-            destdir: sourceSets.main.output.classesDir,
-            sourcedestdir: destDir,
-            wsdl:wsdlLocation)
-      }
-   }
+task wsimport(description: 'Create java stubs from WSDL') {
+    doLast {
+        ant {
+            sourceSets.main.output.classesDir.mkdirs()
+            destDir.mkdirs()
+            taskdef(name: 'wsimport',
+                classname: 'com.sun.tools.ws.ant.WsImport',
+                classpath: configurations.jaxws.asPath)
+            wsimport(keep: true,
+                destdir: sourceSets.main.output.classesDir,
+                sourcedestdir: destDir,
+                wsdl: wsdlLocation)
+        }
+    }
 }
 compileJava.dependsOn(wsimport)
 
-task cleanAll(description:'Complete clean of project and generated artifacts') {
-   doLast {
-      delete destDir
-   }
+task cleanAll(description: 'Complete clean of project and generated artifacts') {
+    doLast {
+        delete destDir
+    }
 }
 cleanAll.dependsOn 'clean'
 
@@ -107,16 +105,16 @@ publishing {
             // publish jar archive
             from components.java
             // include publish README.md
-            artifact ('README.md') {
+            artifact('README.md') {
                 classifier = 'README'
-                extension  = 'md'
+                extension = 'md'
             }
         }
     }
     // publish artifacts to local directory
     repositories {
-       maven {
-          url file(localrepo)
-       }
+        maven {
+            url file(localrepo)
+        }
     }
- }
+}

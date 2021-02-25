@@ -56,6 +56,9 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
+import org.junit.BeforeClass;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * <p>
@@ -73,7 +76,18 @@ public class WsExampleUtil {
        DATE_FORMATTER = new SimpleDateFormat("yyyy/DDD HH:mm:ss");
        DATE_FORMATTER.setTimeZone(UTC_TIME_ZONE);
    }
-   
+   // using unsecure wsdl location to avoid setting up in ide
+   protected static String wsdlLocation = "http://sscWeb.gsfc.nasa.gov/WS/ssc/2/SatelliteSituationCenterService?wsdl";
+   protected static SatelliteSituationCenterInterface ssc;
+   protected static Calendar now = Calendar.getInstance(UTC_TIME_ZONE);
+
+   @BeforeClass
+   public static void setup() throws MalformedURLException {
+      System.out.println("Setting up unit test...");
+      ssc = getSSC(wsdlLocation);
+      assertTrue(ssc != null);
+   }
+
    public static SatelliteSituationCenterInterface getSSC(String wsdlLocation) throws MalformedURLException {
       System.setProperty("http.agent", "WsExample (" + 
          System.getProperty("os.name") + " " + 
